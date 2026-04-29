@@ -1,4 +1,5 @@
 import 'package:course_app/cart/cart_item.dart';
+import 'package:course_app/cart/cart_item_tile.dart';
 import 'package:flutter/material.dart';
 
 class Cart extends StatefulWidget {
@@ -20,9 +21,15 @@ class _CartState extends State<Cart> {
     }
 
     setState(() {
-      _items.add(CartItem(name: text, quantity: quantity));
+      _items.add(CartItem(id: DateTime.now().millisecondsSinceEpoch, name: text, quantity: quantity));
       quantity = 1;
       _controller.clear();
+    });
+  }
+
+  void _removeItem(int id){
+    setState(() {
+      _items.removeWhere((item) => item.id == id);      
     });
   }
 
@@ -78,9 +85,13 @@ class _CartState extends State<Cart> {
           ),
           Expanded(
             child: ListView.builder(
-              itemBuilder: (_, index) =>
-                  Text('${_items[index].name} - ${_items[index].quantity}'),
+              itemBuilder: (_, index) => CartItemTile(key: ValueKey(_items[index].id), item: _items[index], onRemove: _removeItem),
               itemCount: _items.length,
+              findChildIndexCallback: (Key key) {
+                final valueKey = key as ValueKey<int>;
+                final index = _items.indexWhere((item) => item.id == valueKey.value);
+                return index >= 0 ? index : null;
+              },
             ),
           ),
         ],
