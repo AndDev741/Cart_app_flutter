@@ -17,6 +17,7 @@ class CartItemTile extends StatefulWidget {
 
 class _CartItemTileState extends State<CartItemTile> {
   bool _isBought = false;
+  String loadingText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class _CartItemTileState extends State<CartItemTile> {
          }
       ),
       title: Text(widget.item.name),
-      subtitle: Text('Qty: ${widget.item.quantity}'),
+      subtitle: Text('Qty: ${widget.item.quantity} -- $loadingText'),
       trailing: IconButton(
         onPressed: () => widget.onRemove(widget.item.id), 
         icon: Icon(Icons.delete, color: Colors.red,)
@@ -43,6 +44,15 @@ class _CartItemTileState extends State<CartItemTile> {
   void initState() {
     super.initState();
     debugPrint('initState para item ${widget.item.id} (${widget.item.name})');
+    fetchAfterInit();
+  }
+
+  void fetchAfterInit() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if(!mounted){
+      return;
+    }
+    // If we was receiving data, should set here
   }
 
   @override
@@ -53,8 +63,10 @@ class _CartItemTileState extends State<CartItemTile> {
 
   @override
   void didUpdateWidget(CartItemTile oldWidget) {
+    loadingText = "LOADING...";
     super.didUpdateWidget(oldWidget);
     debugPrint("Did update widget to ${widget.item.id} (${widget.item.name})");
+    loadingText = "";
   }
 
   @override
