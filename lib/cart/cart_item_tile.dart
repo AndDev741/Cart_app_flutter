@@ -46,6 +46,24 @@ class _CartItemTileState extends State<CartItemTile> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    debugPrint('did change dependencies to ${widget.item.id} (${widget.item.name})');
+  }
+
+  @override
+  void didUpdateWidget(CartItemTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint("Did update widget to ${widget.item.id} (${widget.item.name})");
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    debugPrint("Deactivating page for ${widget.item.id} (${widget.item.name})");
+  }
+
+  @override
   void dispose() {
     debugPrint('dispose do item ${widget.item.id} (${widget.item.name})');
     super.dispose();
